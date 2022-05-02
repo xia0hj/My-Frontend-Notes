@@ -1,4 +1,7 @@
-# 前端面试笔记
+# Vue笔记
+
+## 踩坑记录
+1. chrome source标签中不显示src，解决：ctrl+P，然后输入?，选择Run Command，搜索source map相关命令，开启
 
 ## Vue生命周期
 
@@ -16,3 +19,15 @@
 12. 钩子函数beforeDestroy( )：当调用vm.$destroy( )函数时，在开始销毁实例前会执行该钩子函数
 13. 清除子组件、事件监听器等
 14. 钩子函数destroyed( )：组件完全销毁后执行该钩子函数
+
+## 为什么data是一个函数
+
+对象为引用类型，当重用组件时，由于数据对象都指向同一个data对象，当在一个组件中修改data时，其他重用的组件中的data会同时被修改；而使用返回对象的函数，由于每次返回的都是一个新对象，引用地址不同，则不会出现这个问题。
+
+## Vue响应式原理
+
+defineReactive
+每个data都有一个对应的Dep
+  
+## Vue源码笔记
+1. 入口文件：src/platform/runtime/index.js -> src/core/index.js -> src/core/instance/index.js
