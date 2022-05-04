@@ -1,7 +1,8 @@
 # Vue笔记
 
-## 踩坑记录
+## 实践
 1. chrome source标签中不显示src，解决：ctrl+P，然后输入?，选择Run Command，搜索source map相关命令，开启
+2. 源码入口文件：src/platform/runtime/index.js -> src/core/index.js -> src/core/instance/index.js
 
 ## Vue生命周期
 
@@ -20,14 +21,29 @@
 13. 清除子组件、事件监听器等
 14. 钩子函数destroyed( )：组件完全销毁后执行该钩子函数
 
+## v-for和v-if哪个优先级更高
+1. 在vue2中v-for优先于v-if被解析，在vue3中v-if优先级高于v-for
+2. 实践中也不应该把它们放一起，因为v-for优先的话，哪怕我们只渲染列表中一小部分元素，也得在每次重渲染的时候遍历整个列表。
+3. 如果是为了过滤列表中的某些项目，可以定义计算属性，返回过滤后的列表让v-for使用
+4. 如果是为了隐藏整个列表的话，可以把v-if放在v-for的容器元素上，例如ul, ol
+
+## key的作用
+1. key的作用主要是为了更高效的更新虚拟DOM
+2. vue在更新过程中判断两个节点是否相同时，key是其中一个判断条件，
+
 ## 为什么data是一个函数
 
 对象为引用类型，当重用组件时，由于数据对象都指向同一个data对象，当在一个组件中修改data时，其他重用的组件中的data会同时被修改；而使用返回对象的函数，由于每次返回的都是一个新对象，引用地址不同，则不会出现这个问题。
 
 ## Vue响应式原理
 
-defineReactive
-每个data都有一个对应的Dep
+响应式指的是数据发生改变时，视图会重新渲染，匹配最新的值  
+原理是通过Object.defineProperty()为每一个data数据添加get和set方法来进行数据劫持，每个属性都会有一个专属的依赖收集的数组;  
+当页面使用到某个属性时，会触发Object.defineProperty()添加的get()函数，将对应的watcher放到该属性的依赖收集数组中;  
+当数据发生改变时，会触发Object.defineProperty()添加的set()函数，会遍历依赖收集数据，通知watcher进行更新
+
+## Vue3响应式原理(未完成)
+
+Vue3.0改用Proxy API代替Object.defineProperty  
+1. defineProperty的监听是针对某一个属性的，vue2中的实现需要递归遍历所有属性，给它们全加上getter和setter；而Proxy API的监听是针对一个对象的，能够监听对该对象
   
-## Vue源码笔记
-1. 入口文件：src/platform/runtime/index.js -> src/core/index.js -> src/core/instance/index.js

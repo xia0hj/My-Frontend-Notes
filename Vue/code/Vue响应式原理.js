@@ -160,7 +160,7 @@ class Watcher {
 }
 
 /**
- * 将obj的key值修改为响应式
+ * 将obj的key值修改为响应式，设置get()和set()方法
  * @param {object} obj
  * @param {string} key
  */
