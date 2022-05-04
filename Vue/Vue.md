@@ -4,6 +4,15 @@
 1. chrome source标签中不显示src，解决：ctrl+P，然后输入?，选择Run Command，搜索source map相关命令，开启
 2. 源码入口文件：src/platform/runtime/index.js -> src/core/index.js -> src/core/instance/index.js
 
+## vm属性
+
+### Vue.prototype
+1. Vue.prototype._render(): 调用vm.$options.render()得到VNode并返回
+
+### 实例vm
+1. vm._VNode: 旧的VNode
+2. vm.$options: new Vue()对象的各个属性，例如data, props等
+
 ## Vue生命周期
 
 1. 创建一个vue的实例对象，然后在这个对象上创建一些生命周期函数和默认的事件
@@ -27,23 +36,36 @@
 3. 如果是为了过滤列表中的某些项目，可以定义计算属性，返回过滤后的列表让v-for使用
 4. 如果是为了隐藏整个列表的话，可以把v-if放在v-for的容器元素上，例如ul, ol
 
-## key的作用
-1. key的作用主要是为了更高效的更新虚拟DOM
-2. vue在更新过程中判断两个节点是否相同时，key是其中一个判断条件，
-
 ## 为什么data是一个函数
 
 对象为引用类型，当重用组件时，由于数据对象都指向同一个data对象，当在一个组件中修改data时，其他重用的组件中的data会同时被修改；而使用返回对象的函数，由于每次返回的都是一个新对象，引用地址不同，则不会出现这个问题。
 
 ## Vue响应式原理
 
-响应式指的是数据发生改变时，视图会重新渲染，匹配最新的值  
-原理是通过Object.defineProperty()为每一个data数据添加get和set方法来进行数据劫持，每个属性都会有一个专属的依赖收集的数组;  
-当页面使用到某个属性时，会触发Object.defineProperty()添加的get()函数，将对应的watcher放到该属性的依赖收集数组中;  
-当数据发生改变时，会触发Object.defineProperty()添加的set()函数，会遍历依赖收集数据，通知watcher进行更新
+1. 响应式指的是数据发生改变时，视图会重新渲染，匹配最新的值  
+2. vue2实现响应式的原理是通过Object.defineProperty()为每一个data数据添加get和set方法来进行数据劫持，如果是数组则覆盖数组的7个变更方法实现变更通知，每个被拦截访问的属性都会有一个专属的依赖收集的数组;  
+3. 当页面使用到某个属性时，会触发进行拦截的get()函数，将对应的watcher放到该属性的依赖收集数组中;  
+4. 当数据发生改变时，会触发进行拦截的set()函数，会遍历依赖收集数据，通知watcher进行更新
+5. vue2这样实现响应式存在一些问题：（1）初始化时需要遍历对象所有属性，如果对象层级较深，性能不好；（2）通知更新过程需要维护大量dep实例和watcher实例，额外占用内存较多；（3）动态新增、删除对象属性无法拦截，只能用特定set/delete api代替；（4）不支持Map、Set等数据结构
+6. vue3中为了解决以上问题，使用原生的Proxy代替defineProperty，可以同时支持object和array，动态属性增、删都可以拦截，新增数据结构均支持，对象嵌套属性运行时递归，用到才代理，也不需要维护特别多的依赖关系，性能有提升
 
-## Vue3响应式原理(未完成)
+## Vue组件之间的通信方式
 
-Vue3.0改用Proxy API代替Object.defineProperty  
-1. defineProperty的监听是针对某一个属性的，vue2中的实现需要递归遍历所有属性，给它们全加上getter和setter；而Proxy API的监听是针对一个对象的，能够监听对该对象
+1. props: 父组件向下传递数据给子组件
+2. \$emit & v-on: 子组件通过\$emit派发自定义事件，父组件通过v-on监听子组件的自定义事件
+3. \$parent & \$children & \$root: 分别用于访问父组件、子组件、根父组件实例
+4. ref: 访问子组件实例
+5. \$attrs & \$listeners: 把父组件的属性以及作用在父组件上的监听器传递给子组件，父组件仅作中转作用，&lt;child v-bind="\$attrs" v-on="\$listeners" /&gt;
+6. event bus: \$emit表示由当前组件派发事件，\$on表示监听当前组件派发的事件，可以创建一个无DOM的Vue组件并将实例绑定在原型上Vue.prototype.$EventBus=new Vue()，通过this.\$emit()和this.\$on()来实现跨组件通信，注意要在main.js中根节点mount之前将bus绑定到原型
+7. vuex
+
+
+
+
+
+
+
+## key的作用（未完成）
+1. key的作用主要是为了更高效的更新虚拟DOM
+2. vue在更新过程中判断两个节点是否相同时，key是其中一个判断条件，
   
