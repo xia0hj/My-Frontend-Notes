@@ -12,10 +12,10 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "启动reactive.js",
+      "name": "调试js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceRoot}/reactive.js",
+      "program": "${workspaceRoot}/solution.js",
     },
   ]
 }
