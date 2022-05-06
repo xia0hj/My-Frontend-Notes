@@ -64,3 +64,30 @@ function slidingWindow(nums, k){
   return result
 }
 ```
+
+## 树状数组模板(可用于保存前缀和)
+
+```js
+class BIT{
+  constructor(length){
+    // 树状数组的下标从1开始
+    this.tree = new Array(length+1).fill(0)
+  }
+  addVal(index, val){
+    // 修改从左往右
+    while(index < this.tree.length){
+      this.tree[index] += val
+      index += (index & -index)
+    }
+  }
+  prefixSum(index){
+    // 前缀和从右往左
+    let sum = 0
+    while(index>0){
+      sum += this.tree[index]
+      index -= (index & -index)
+    }
+    return sum
+  }
+}
+```
