@@ -91,3 +91,21 @@ class BIT{
   }
 }
 ```
+
+## 广度优先搜索模板
+
+```js
+function DFS(start, end){
+  let step = 0
+  const queue = []
+  queue.push(start)
+  while(queue.length>0){
+    const curLength = queue.length
+    for(let i=0; i<curLength; i++){
+      const cur = queue.shift()
+      // 根据cur将下一层的数据入队
+    }
+    step++
+  }
+}
+```

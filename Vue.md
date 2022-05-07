@@ -31,6 +31,7 @@
 14. 钩子函数destroyed( )：组件完全销毁后执行该钩子函数
 
 ## v-for和v-if哪个优先级更高
+
 1. 在vue2中v-for优先于v-if被解析，在vue3中v-if优先级高于v-for
 2. 实践中也不应该把它们放一起，因为v-for优先的话，哪怕我们只渲染列表中一小部分元素，也得在每次重渲染的时候遍历整个列表。
 3. 如果是为了过滤列表中的某些项目，可以定义计算属性，返回过滤后的列表让v-for使用
@@ -59,9 +60,19 @@
 6. event bus: \$emit表示由当前组件派发事件，\$on表示监听当前组件派发的事件，可以创建一个无DOM的Vue组件并将实例绑定在原型上Vue.prototype.$EventBus=new Vue()，通过this.\$emit()和this.\$on()来实现跨组件通信，注意要在main.js中根节点mount之前将bus绑定到原型
 7. vuex
 
+## computed和watch的区别
+
+1. computed 是计算一个新的属性，并将该属性挂载到 Vue 实例上，而 watch 是监听已经存在且已挂载到 Vue 实例上的数据，所以用 watch 同样可以监听 computed 计算属性的变化
+2. computed本质是惰性求值的watch，只有当依赖属性变化后第一次访问computed才会计算新的值；而watch则是数据一旦发生变化就会执行回调函数
+3. 从使用场景上说，computed 适用一个数据被多个数据影响，而 watch 适用一个数据影响多个数据
 
 
 
+
+
+
+
+## $route和$router的区别（未完成）
 
 
 

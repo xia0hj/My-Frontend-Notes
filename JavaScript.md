@@ -1,4 +1,4 @@
-# JS笔记
+# JavaScript笔记
 
 ## JavaScript的基本数据类型和引用数据类型
 
@@ -67,6 +67,12 @@ function newFn(){
 3. 当我们访问一个对象的属性时，如果对象内部不存在这个属性，就会到它的原型对象上去寻找属性，原型对象又会有自己的原型，这样一直找下去就是原型链。
 4. 原型链的尽头一般是Object.prototype，这也是我们新建的对象能够使用 toString 等常用方法的原因
 
+## 闭包
+
+1. 闭包是指有权访问另一个函数作用域中的变量的函数，创建闭包的常见方式是在函数中创建另一个函数，通过这个函数访问到当前函数中的局部变量
+2. 用途一：能在外部通过闭包函数取访问函数内部的变量，可以用这种方法来创建私有变量
+3. 用途二：使已经运行结束的函数上下文中的变量继续保留在内存中，因为闭包函数保留了对这个变量的引用，所以不会被回收
+
 ## V8引擎垃圾回收
 
 1. v8的垃圾回收是分代回收的，将对象分为新生代和老年代，存放于不同的空间
@@ -88,5 +94,50 @@ function newFn(){
 收。
 4. 第四种情况是不合理的使用闭包，从而导致某些变量一直被留在内存当中。
 
+## 函数节流和防抖
+
+1. 函数节流：在规定的单位时间内，只能有一次触发事件的回调函数执行，如果事件被触发多次，只有一次能生效
+2. 函数防抖：在事件触发 n 秒之后执行回调函数，如果在 n 秒之内再次触发事件，则重新计时
+
+```js
+// 防抖
+function debounce(fn, waitTime){
+  const timer = null
+  return function (){
+    if(timer){
+      clearTimeout(timer)
+      timer = null
+    }
+    timer = setTimeout(()=>{
+      // this = 调用debounceSay()的上下文
+      // arguments = '呃呃'
+      fn.apply(this, arguments)
+    }, waitTime)
+  }
+}
+// 节流
+function throttle(fn, delayTime){
+  const timer = null
+  return function(){
+    if(timer){
+      return
+    }
+    timer = setTimeout(()=>{
+      fn.apply(this, arguments)
+      timer = null
+    }, delayTime)
+  }
+}
+
+const say = (str) => {console.log('I say: ', str)}
+ 
+const debounceSay = debounce(say, 3000)
+const throttleSay = throttle(say, 3000)
+// <button onclick="throttleSay('节流')">节流按钮</button>
+// <button onclick="debounceSay('防抖')">防抖按钮</button>
+```
+
+
 ## Object.defineProperty()的坑
+
 设定getter和setter时，不能直接返回或修改obj.key的值，否则在getter中访问又会继续触发getter，造成无限递归
