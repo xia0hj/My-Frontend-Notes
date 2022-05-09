@@ -24,6 +24,11 @@ use strict 指的是严格运行模式，在这种模式对 js 的使用添加�
 用 with 语句等。设立严格模式的目的，主要是为了消除代码使用中的一些不安全的使用方式，也是为了消除 js 语法本身的一
 些不合理的地方，以此来减少一些运行时的怪异的行为。
 
+## isNaN()和Number.isNaN()区别
+
+1. isNaN()会尝试将参数类型转换数字，任何不能被转换为数值的都会返回true，因此传入非数字会返回true
+2. Number.isNaN()会首先判断参数类型是否数字，如果传入非数字会直接返回false，是数字才会继续判断
+
 ## new做了什么及其实现
 
 1. 首先创建一个空对象
@@ -53,6 +58,18 @@ function newFn(){
 // const obj = newFn(构造函数, 参数...)
 // const obj = new 构造函数(参数)
 ```
+
+## 作用域和变量提升
+
+1. 全局变量：全局作用域声明的变量和方法都属于window对象的属性，浏览器关闭时才会销毁
+2. 作用域链：当在函数作用域操作一个变量时，它会先在自身作用域中寻找，如果有就直接使用（就近原则）。如果没有则向上一级作用域中寻找，直到找到全局作用域；如果全局作用域中依然没有找到，则会报错 ReferenceError。
+3. 变量提升：var声明的变量会在所有代码执行之前被声明，但不会赋值；let声明也会提前，但初始化过程不会，在let声明后初始化前访问变量会报错。
+
+## var, let, const区别
+
+1. var变量没有块的概念
+2. let变量支持块作用域
+3. const常量支持块作用域且声明同时必须初始化，此后不能修改；const对象不能修改引用，但可以修改对象的值
 
 ## 函数的call，apply，bind方法区别
 
@@ -102,7 +119,7 @@ function newFn(){
 ```js
 // 防抖
 function debounce(fn, waitTime){
-  const timer = null
+  let timer = null
   return function (){
     if(timer){
       clearTimeout(timer)
@@ -117,7 +134,7 @@ function debounce(fn, waitTime){
 }
 // 节流
 function throttle(fn, delayTime){
-  const timer = null
+  let timer = null
   return function(){
     if(timer){
       return
