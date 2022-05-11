@@ -109,3 +109,36 @@ function DFS(start, end){
   }
 }
 ```
+
+## 序列化二叉树通解
+
+```js
+// 将树转为前序遍历的字符串
+function serialize(root){
+  if(root===null) return '#'
+  const leftTree = serialize(root.left)
+  const rightTree = serialize(root.right)
+  return `${root.val},${root.left},${root.right}`
+}
+// 将前序遍历的字符串转为树
+function deserialize(str){
+  const splitData = str.split(',')
+  return buildTree(splitData)
+}
+function buildTree(array){
+  if(array[0]==='#'){
+    array.shift()
+    return null
+  }
+  const curVal = array.shift()
+  const node = new TreeNode(curVal)
+  node.left = buildTree(array)
+  node.right = buildTree(array)
+  return node
+}
+// 树的定义
+function TreeNode(val) {
+  this.val = val;
+  this.left = this.right = null;
+}
+```
