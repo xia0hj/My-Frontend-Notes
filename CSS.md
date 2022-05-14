@@ -98,6 +98,65 @@
 }
 ```
 
+## 圣杯布局和双飞翼布局
+
+1. 圣杯布局步骤
+   1. 为容器和左中右分别设置统一高度和左右固定宽度，中宽度 100%，若容器不设高度会因为子元素全部浮动导致高度坍塌
+   2. 左中右全部 float:left，此时中间独占一行，左右被挤到下一行
+   3. 通过margin-left移动左和右，分别贴着中间部分的左边缘和右边缘；此时左右会遮挡中间内容
+   4. 为左和右设置相对定位，并分别通过left和right设负值，使其不与中间部分相交
+   5. 由于中间100%宽度将左右挤到视图外，为容器设置内边距压缩中间部分，为左右腾出位置
+
+2. 双飞翼布局步骤
+   1. 同圣杯布局前3步，使left和right与center同一行，此时left和right会遮挡center部分内容
+   2. 为center设置子元素，并设置margin让子元素不被左右遮挡
+
+3. 对比：
+   1. 都是实现三列布局，两边固定中间自适应
+   2. 都是主列dom放在最前面，让它优先加载
+   3. 都是让三列浮动，然后通过负外边距形成三列布局
+   4. 不同之处在于如何处理中间主列：圣杯布局是利用父容器的内边距 + 左右两列相对定位；双飞翼布局是把主列内容放在主列子元素中，利用这个子元素的外边距进行调整
+   5. 圣杯布局缺点：center部分的最小宽度不能小于left部分的宽度，否则会left部分掉到下一行
+   6. 双飞翼布局缺点：多加了一层dom节点，增加了渲染的计算量
+
+```scss
+$h: 500px; //  统一高度
+$lw: 100px; // 左固定宽度
+$rw: 200px; // 右固定宽度
+
+.container{
+  height: $h; // （1）设定高度
+  padding-left: $lw; // （5）通过设置内边距压缩center宽度，为left腾出空间
+  padding-right: $rw; // （5）通过设置内边距压缩center宽度，为right腾出空间
+}
+.left{
+  height: $h; // （1）设定高度
+  width: $lw; // （1）设定左固定宽度
+  float: left; // （2）左中右全部向左浮动
+  margin-left: -100%; // （3）center宽度100%，使left的左边缘与center的左边缘重合
+  position: relative; // （4）相对定位left属性才会生效
+  left: (-$lw); // （4）left设负值向左移动，使left的右边缘与center左边缘重合
+}
+.right{
+  height: $h; // （1）设定高度
+  width: $rw; // （1）设定右固定宽度
+  float: left; // （2）左中右全部向左浮动
+  margin-left: (-$rw); // （3）向左移动right的宽度，使right的右边缘与center的右边缘重合
+  position: relative; // （4）相对定位right属性才会生效
+  right: (-$rw); // （4）right设负值向右移动，使right的左边缘与center的右边缘重合
+}
+.center{
+  height: $h; // （1）设定高度
+  width: 100%; // （1）center自适应宽度
+  float: left; // （2）左中右全部向左浮动
+}
+// 如果使用双飞翼布局，需要为center添加一个子元素，且不执行（4）（5）这两步
+.center .inner{
+  margin-left: $lw;
+  margin-right: $rw;
+}
+```
+
 ## 常用属性
 
 ```scss
@@ -114,4 +173,7 @@ position: absolute;
 // 一般用于将元素变为BFC，BFC不会与浮动元素相交；加上zoom:1;兼容IE
 overflow: hidden;
 zoom: 1;
+
+// flex布局的子元素根据剩余空间自动放大缩小
+flex: 1;
 ```
