@@ -157,6 +157,13 @@ $rw: 200px; // 右固定宽度
 }
 ```
 
+## flex弹性布局
+
+1. flex是CSS3新增的布局方式，将一个元素的display属性设为flex从而使它成为flex布局容器
+2. 容器有两条轴，一个是水平的主轴，一个与主轴垂直的交叉轴，可通过 flex-direction 属性指定主轴的方向
+3. justify-content 可指定元素在主轴上的排列方式；align-items 可指定元素在交叉轴上的排列方式；flex-wrap 规定换行方式
+4. 可通过 flex-grow、flex-shrink 来指定当排列空间有剩余时，元素的放大缩小比例
+
 ## 常用属性
 
 ```scss
