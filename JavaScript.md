@@ -199,6 +199,7 @@ const throttleSay = throttle(say, 3000)
 ```
 
 
-## Object.defineProperty()的坑
+## 一些要注意的点
 
-设定getter和setter时，不能直接返回或修改obj.key的值，否则在getter中访问又会继续触发getter，造成无限递归
+1. 通过 Object.defineProperty() 设定 getter 和 setter 时，不能直接返回或修改 obj.key 的值，否则在 getter 中访问又会继续触发 getter，造成无限递归
+2. array.sort() 默认是按字符串升序排列；要按数字排列可写成 array.sort((a,b)=>a-b)

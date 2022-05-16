@@ -40,6 +40,14 @@
 }
 ```
 
+## margin重叠
+
+1. 垂直方向上两个相邻元素的 margin 发生重叠
+2. 第一种情况：相邻兄弟元素的 margin 重叠，可以只设置一个想要的外边距，也可以将其中一个元素放入BFC，多加一层 div 并设新的 div 为 overflow:auto，但这样会改变结构
+3. 第二种情况：父元素和子元素的 margin-top 重叠，可以让父元素形成BFC，也可以为父元素设置 padding-top、border-top 来将它们分隔开
+4. 第三种情况：高度为 auto 的父元素与子元素的 margin-bottom 重叠，可以激活父元素的BFC，也可以为父元素设置 padding-bottom、border-bottom 来将它们分隔开
+5. 第四种情况：没有内容的元素，自身的 margin-top 和 margin-bottom 重叠，可以给它设置 border、padding-top、padding-bottom 或者 height 来解决
+
 ## 如何让一个div居中
 
 ```scss

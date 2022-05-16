@@ -54,10 +54,18 @@
   "result": {
     "songs": [{ // 歌曲数组
       "id":,
-      "mid"
+      "mid":, // 歌曲mid，用于获取url
+      "name":, // 歌名
+      "album":, // 歌曲所属专辑名
+      "duration":, // 歌曲时长，单位秒
+      "singer":, // 歌手名
+      "pic":, // 专辑图片链接
+      "url":, // 歌曲播放链接，暂时为空
     }]
   }
 }
+
+/api/getSongsUrl
 ```
 
 ## 自定义指令
