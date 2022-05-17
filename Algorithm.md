@@ -142,3 +142,7 @@ function TreeNode(val) {
   this.left = this.right = null;
 }
 ```
+
+## 原地合并两个有序数组
+
+要将合并结果放到其中一个参数数组中，可以从两个数组的末尾开始双指针遍历，结果保存至其中一个数组

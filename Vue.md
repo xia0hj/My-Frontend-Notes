@@ -69,7 +69,14 @@
 
 ## Vue实现过渡动画
 
-
+1. 使用vue的 transition 标签结合 css 样式实现
+   1. v-enter：元素进入动画的初始样式
+   2. v-enter-to：元素进入动画最后的样式，一般不去定义这个 class，因为一般来说进入动画的结果就是元素本来的样式
+   3. v-enter-active：定义了元素从 v-enter 到 v-enter-to 过渡变化所需时间及变化方式等
+   4. v-leave：元素离开动画的初始样式，一般不去定义这个 class，因为一般来说离开动画的初始样式就是元素本来的样式
+   5. v-leave-to
+   6. v-leave-active
+   7. 在 transition 标签中可通过 name 属性替换过渡 css 类名前缀的 v
 
 
 

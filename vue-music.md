@@ -7,6 +7,33 @@
     2. 当进入歌手列表页时计算每一分组的高度，并且在发生滚动时记录当前视图顶部离整个列表顶部的距离，计算下一分组的顶部高度和当前视图高度，实现将当前组标题往上顶
     3. v-bind:data-xxxx可将数据保存至DOM的dataset中
     4. 右侧快捷栏，触摸移动时记录y轴位移，计算移动了哪个分组中
+    5. 点击歌手进入歌手详情页时，使用了路由过渡效果
+2. 歌手歌曲列表：
+   1. 点击任一歌曲，会触发顺序播放，修改 store 中的 sequenceList、playList、isPlaying、playMode、currentIndex、isFullScreen
+   2. 点击随机播放按钮，类似于顺序播放，不同点在于 playList 是打乱顺序的，且 currentIndex 设为 0
+3. 全屏播放器
+   1. watch currentSong 和 isPlaying 控制 audio 是否播放，如果 isSongReady 为 false，则什么都不做；一旦 currentSong 发生变化，则修改为 isSongReady=false 等待 audio 加载完成后派发 canplay 事件修改为 isSongReady=true
+   2. 播放键可切换 isPlaying 状态
+   3. 前进/后退键修改 currentIndex、isPlaying 状态，会取消暂停，如果列表只有一首歌则修改 audio dom 的 currentTime 为 0，重新播放当前歌曲
+   4. isSongReady=false 时播放/前进/后退键什么都不做且禁用按钮
+   5. 切换播放模式会修改 playList、playMode、currentIndex 状态，不会打断当前播放的歌曲，会找到当前歌曲在新的 playList 中的下标
+   6. 收藏歌曲会修改 favoriteList 状态，
+
+```js
+const state = {
+  sequenceList: [], // 要播放的歌曲列表
+  playList: [], // 播放顺序
+  isPlaying: false, // 播放状态
+  playMode: PLAY_MODE.sequence, // 播放模式，默认顺序播放
+  currentIndex: 0, // 当前播放歌曲在 playList 中的下标
+  isFullScreen: false, // 是否打开全屏的播放器
+  favoriteList: getValueArray(FAVORITE_KEY),
+  searchHistory: getValueArray(SEARCH_KEY)
+}
+const currentSong = (state) => {
+  return state.playList[state.currentIndex] || {}
+}
+```
 
 ## 接口
 
@@ -60,12 +87,12 @@
       "duration":, // 歌曲时长，单位秒
       "singer":, // 歌手名
       "pic":, // 专辑图片链接
-      "url":, // 歌曲播放链接，暂时为空
+      "url":, // 歌曲播放链接，暂时为空；需要通过/api/getSongsUrl并以mid为参数去获取
     }]
   }
 }
 
-/api/getSongsUrl
+
 ```
 
 ## 自定义指令
