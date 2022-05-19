@@ -17,7 +17,11 @@
    3. 前进/后退键修改 currentIndex、isPlaying 状态，会取消暂停，如果列表只有一首歌则修改 audio dom 的 currentTime 为 0，重新播放当前歌曲
    4. isSongReady=false 时播放/前进/后退键什么都不做且禁用按钮
    5. 切换播放模式会修改 playList、playMode、currentIndex 状态，不会打断当前播放的歌曲，会找到当前歌曲在新的 playList 中的下标
-   6. 收藏歌曲会修改 favoriteList 状态，
+   6. 收藏歌曲会修改 favoriteList 状态和修改 localStorage，会将新的收藏歌曲插入到收藏列表的头部
+4. 全屏播放器进度条
+   1. 进度条以按钮左侧位置表示进度，歌曲结束时，按钮右侧紧贴进度条右侧，所以实际走过的进度条是 0 ~ 进度条宽度减去按钮宽度
+   2. 发生拖动时向外派发事件，通过记录 x 轴位移与进度条宽度的比例计算新的播放进度；播放器在拖动期间只更新页面的当前时间，拖动结束后才会去更新 audio 的 currentTime，还会取消暂停；拖动期间 audio 还在播放但不会再更新当前时间
+   3. 单击改变时间，会通过 getBoundingClientRect() 获取到进度条最左侧离视图左边界的距离，再根据点击位置计算出当前点击的进度大小
 
 ```js
 const state = {

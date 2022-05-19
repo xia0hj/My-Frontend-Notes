@@ -146,3 +146,9 @@ function TreeNode(val) {
 ## 原地合并两个有序数组
 
 要将合并结果放到其中一个参数数组中，可以从两个数组的末尾开始双指针遍历，结果保存至其中一个数组
+
+## 二分查找
+
+1. 左开右开区间，初始值 left=-1，right=nums.length，循环时设 left=mid 或 right=mid
+2. 求 mid 避免溢出：const mid = left + Math.floor((right-left)/2)
+3. 如果发生无限循环，注意 mid 是不是小数，js不会像java默认向下取整

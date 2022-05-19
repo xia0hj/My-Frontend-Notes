@@ -4,6 +4,7 @@
 
 1. 通过 Object.defineProperty() 设定 getter 和 setter 时，不能直接返回或修改 obj.key 的值，否则在 getter 中访问又会继续触发 getter，造成无限递归
 2. array.sort() 默认是按字符串升序排列；要按数字排列可写成 array.sort((a,b)=>a-b)
+3. (a+b)/2 可能会得到小数不会取整，需要手动调用 Math.floor()
 
 ## vue
 
