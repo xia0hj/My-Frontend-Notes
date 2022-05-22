@@ -9,3 +9,9 @@
 ## vue
 
 1. vue2.0 不能使用最新版本的 sass-loader，要使用 npm i -D sass-loader@8.0.0
+
+## dev
+
+```shell
+npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/node
+```
