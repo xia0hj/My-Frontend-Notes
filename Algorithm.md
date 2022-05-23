@@ -98,12 +98,24 @@ class BIT{
 function DFS(start, end){
   let step = 0
   const queue = []
+
+  // 初始化二维数组，注意不要用 fill() 方法
+  // 在每次 push 队列时修改 visited
+  const visited = []
+  for(let i=0; i<length; i++) visited[i] = []
+
   queue.push(start)
+  visited[start.row][start.col] = true
+
   while(queue.length>0){
     const curLength = queue.length
     for(let i=0; i<curLength; i++){
       const cur = queue.shift()
       // 根据cur将下一层的数据入队
+      if(canPush){
+        queue.push(next)
+        visited[next.row][next.col] = true
+      }
     }
     step++
   }
@@ -152,3 +164,20 @@ function TreeNode(val) {
 1. 左开右开区间，初始值 left=-1，right=nums.length，循环时设 left=mid 或 right=mid
 2. 求 mid 避免溢出：const mid = left + Math.floor((right-left)/2)
 3. 如果发生无限循环，注意 mid 是不是小数，js不会像java默认向下取整
+
+## 状态压缩-数字二进制用作数组
+
+```js
+function getBit(num, index) {
+  const cur = (1 << index) 
+  return num & cur
+}
+function setBit(num, index, boolVal) {
+  const cur = (1 << index) // 假如修改下标 2，那么通过 << 左移后 cur = '100'
+  if (boolVal) {
+    return num | cur
+  } else {
+    return num & (~cur)
+  }
+}
+```

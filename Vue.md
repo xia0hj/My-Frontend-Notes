@@ -66,8 +66,21 @@
 2. computed本质是惰性求值的watch，只有当依赖属性变化后第一次访问computed才会计算新的值；而watch则是数据一旦发生变化就会执行回调函数
 3. 从使用场景上说，computed 适用一个数据被多个数据影响，而 watch 适用一个数据影响多个数据
 
+## v-model
 
-## Vue实现过渡动画
+1. v-model 是一个语法糖，会默认使用组件中名为 value 的 props 和 名为 input 的事件
+2. vue3.0 默认使用名为 modelValue 的 props 和名为 update:modelValue 的事件
+
+```html
+对于原生元素
+<input v-model="msg" /> 相当于
+<input v-bind:value="msg" v-on:input="msg=$event.target.value" />
+对于自定义 vue 组件
+<my-component v-model="msg"/> 相当于
+<my-component v-bind:value="msg" v-on:input="msg=argument[0]" />
+```
+
+## Vue实现过渡动画（未完成）
 
 1. 使用vue的 transition 标签结合 css 样式实现
    1. v-enter：元素进入动画的初始样式

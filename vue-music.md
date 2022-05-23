@@ -9,8 +9,9 @@
     4. 右侧快捷栏，触摸移动时记录y轴位移，计算移动了哪个分组中
     5. 点击歌手进入歌手详情页时，使用了路由过渡效果
 2. 歌手歌曲列表：
-   1. 点击任一歌曲，会触发顺序播放，修改 store 中的 sequenceList、playList、isPlaying、playMode、currentIndex、isFullScreen
-   2. 点击随机播放按钮，类似于顺序播放，不同点在于 playList 是打乱顺序的，且 currentIndex 设为 0
+   1. 如果是从歌手列表点进来的，父组件会传一个 singer 参数并保存至 localStorage，如果是在歌曲列表刷新了，那么父组件没传参数，就会取 localStorage 存的 singer
+   2. 点击任一歌曲，会触发顺序播放，修改 store 中的 sequenceList、playList、isPlaying、playMode、currentIndex、isFullScreen
+   3. 点击随机播放按钮，类似于顺序播放，不同点在于 playList 是打乱顺序的，且 currentIndex 设为 0
 3. 全屏播放器控制
    1. watch currentSong 和 isPlaying 控制 audio 是否播放，如果 isSongReady 为 false，则什么都不做；一旦 currentSong 发生变化，则修改为 isSongReady=false 等待 audio 加载完成后派发 canplay 事件修改为 isSongReady=true
    2. 播放键可切换 isPlaying 状态
@@ -32,8 +33,14 @@
    1. watch isFullScreen currentSong，绑定歌曲信息，如果全屏播放器没有显示，则会显示 mini 播放器
    2. mini 播放器左侧的旋转 cd 复用全屏播放器的逻辑，进入全屏时会有小 cd 变成大 cd 的动画，退出时也有，这个实现需要获取动态的 cd 样式所以不能写死在 css 中，而想在 js 中写动态的 keyframe 动画需要第三方库 create-keyframe-animation；transition 标签 enter、after-enter、leave、after-leave 事件，监听这些事件去执行动画的播放
 7. mini 播放器的播放列表
-8. 跨页面同步播放列表
-   1. 触发修改播放列表的操作：歌手歌曲列表点击任一歌曲、歌手歌曲列表点击随机播放
+   1. 只有当 playList 有数据时才能显示，列表展示的是 sequenceList，复用全屏播放器的修改播放模式逻辑；当 playList 不为空时，要修改一级路由 router-view 的 bottom 向上给 mini 播放器腾出空间
+   2. watch currentSong，一旦发生改变自动滚动到当前歌曲
+   3. 从播放列表中删除某一歌曲会触发 action，会修改 sequenceList 和 playList，如果被删除歌曲在当前歌曲前面，需要修改 currentIndex 减一，避免当前歌曲发生更改；删除时会让所有删除按钮 disable 0.3秒
+   4. 列表右上角有清空列表的按钮，清空时会修改 sequenceList、playList、currentIndex、isPlaying
+8. 搜索歌曲
+   1. 搜索栏输入时防抖，停止输入后 300 毫秒才会返回数据
+9.  跨页面同步播放列表
+   2. 触发修改播放列表的操作：歌手歌曲列表点击任一歌曲、歌手歌曲列表点击随机播放
 
 ```js
 const state = {
@@ -65,7 +72,7 @@ const currentSong = (state) => {
       "pic": // 轮播图图片链接
     }],
     "alnums":[{ // 热门歌单列表数组
-      "id":, // 列表key
+      "id":, // 列表key，根据 id 通过接口 /api/getAlbum?id= 获取歌单详情
       "pic":, // 歌单图链接
       "title":, // 歌单标题
       "username": // 歌单创建者
@@ -90,8 +97,9 @@ const currentSong = (state) => {
   }
 }
 
-/api/getSingerDetail
-获取某个歌手的歌曲列表，参数mid
+/api/getSingerDetail?mid=  获取某个歌手的歌曲列表，参数为歌手的 mid
+/api/getAlnum?id= 获取某个歌单的歌曲列表，参数为歌单的 id
+/api/getTopDetail?id= 获取某个排行榜的歌曲列表
 {
   "code": 0,
   "result": {
@@ -108,7 +116,53 @@ const currentSong = (state) => {
   }
 }
 
+/api/getTopList 获取排行榜信息
+{
+  "code": 0,
+  "result": {
+    "topList": [{ // 排行榜数组
+      "id":, // 榜id，根据 id 通过 /api/getTopDetail?id= 进入歌曲列表
+      "name":, // 榜名
+      "pic":, // 排行榜头图
+      "period":, // 时间
+      "songList": [{ // 属于该榜的前三首歌数组
+        "id":, // 歌曲key
+        "singerName":, // 歌手名
+        "songName": // 歌名
+      }]
+    }]
+  }
+}
 
+/api/getHotKeys 获取热门搜索
+{
+  "code": 0,
+  "result": {
+    "hotKeys": [{ // 数组
+      "key":, // 热门搜索关键字
+      "id": // 列表key
+    }]
+  }
+}
+
+/api/search 搜索
+参数 query(搜索关键字)、page(结果页码)、isShowSinger(搜索结果是否需要包含歌手)
+{
+  "code": 0,
+  "result": {
+    "hasMore":, // 是否还有更多搜索结果
+    "songs": [{ // 歌曲数组
+      "id":,
+      "mid":, // 歌曲mid，用于获取播放 url 和歌词
+      "name":, // 歌名
+      "album":, // 歌曲所属专辑名
+      "duration":, // 歌曲时长，单位秒
+      "singer":, // 歌手名
+      "pic":, // 专辑图片链接
+      "url":, // 歌曲播放链接，暂时为空；需要通过/api/getSongsUrl并以mid为参数去获取
+    }]
+  }
+}
 ```
 
 ## 自定义指令
