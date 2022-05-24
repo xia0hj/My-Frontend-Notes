@@ -38,9 +38,15 @@
    3. 从播放列表中删除某一歌曲会触发 action，会修改 sequenceList 和 playList，如果被删除歌曲在当前歌曲前面，需要修改 currentIndex 减一，避免当前歌曲发生更改；删除时会让所有删除按钮 disable 0.3秒
    4. 列表右上角有清空列表的按钮，清空时会修改 sequenceList、playList、currentIndex、isPlaying
 8. 搜索歌曲
-   1. 搜索栏输入时防抖，停止输入后 300 毫秒才会返回数据
-9.  跨页面同步播放列表
-   2. 触发修改播放列表的操作：歌手歌曲列表点击任一歌曲、歌手歌曲列表点击随机播放
+   1. PageSearch
+      1. \<search-input v-model="query" \\>
+         1. \<input v-model="query" \\>
+      2. \<search-history \\>
+      3. \<search-result v-bind:query="query" \\>
+   2. 搜索栏输入时防抖，停止输入后 300 毫秒才会返回数据
+   3. 搜索结果组件 props 是搜索关键字并 watch 它，一旦发生改变会进行第一次搜索，等 nextTick 后判断结果是否占满一页，如果不满则标记 isAutoLoading=true，递归执行继续搜索，直到占满一页，点击搜索结果的某一歌曲会执行 action 去添加歌曲，会修改 sequenceList、playList、currentIndex、isPlaying、isFullScreen，会查找新增的歌曲是否已存在两个 List 中，不在会 push，currentIndex 修改为这首新增的歌曲，并取消暂停和开启全屏
+   4. 搜索历史会保存在 state 和 localStorage 中
+
 
 ```js
 const state = {
@@ -191,3 +197,7 @@ app.directive('loading', loadingDirective)
 3. 播放时计算当前时间离下一句歌词的时间差，通过 setTimeout() 在对应时间执行该行歌词的回调函数，然后递归继续播放
 4. 暂停时先记录以下暂停的时间戳，下次播放从暂停处开始
 
+## 多标签页共享播放列表
+
+1. 推荐歌单歌曲、歌手歌曲、排行榜歌曲通过组件 MusicList 选择点击某一歌曲会将列表中的歌曲进行顺序播放，执行 sequentialPlay action，点击随机播放则执行 randomPlay action；搜索歌曲点击某一首会执行 addSong action；mini 播放器的播放列表删除某一首歌会执行 removeSong action，清空列表会执行 clearSongList action
+2. 
