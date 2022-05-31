@@ -1,8 +1,9 @@
 # Vue笔记
 
-## 实践
+## 实践容易忘记的地方
 1. chrome source标签中不显示src，解决：ctrl+P，然后输入?，选择Run Command，搜索source map相关命令，开启
 2. 源码入口文件：src/platform/runtime/index.js -> src/core/index.js -> src/core/instance/index.js
+3. v-bind:class="{ classA: shouldClassAShow, classB: shouldClassBShow }" 由两个变量分别控制 classA 和 classB 是否生效
 
 ## vm属性
 

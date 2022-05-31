@@ -73,21 +73,27 @@ class BIT{
     // 树状数组的下标从1开始
     this.tree = new Array(length+1).fill(0)
   }
+  // 参数 index 从 1 开始
   addVal(index, val){
     // 修改从左往右
     while(index < this.tree.length){
       this.tree[index] += val
-      index += (index & -index)
+      index += lowbit(index)
     }
   }
+  // 参数 index 从 1 开始
   prefixSum(index){
     // 前缀和从右往左
     let sum = 0
     while(index>0){
       sum += this.tree[index]
-      index -= (index & -index)
+      index -= lowbit(index)
     }
     return sum
+  }
+  // 取 num 最低位的 1 及其右边的 0，假如 num 的二进制为 10110100，则 lowbit = 100 取 num 最右边的 100
+  lowbit(num){
+    return (num & -num)
   }
 }
 ```

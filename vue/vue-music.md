@@ -46,6 +46,10 @@
    2. 搜索栏输入时防抖，停止输入后 300 毫秒才会返回数据
    3. 搜索结果组件 props 是搜索关键字并 watch 它，一旦发生改变会进行第一次搜索，等 nextTick 后判断结果是否占满一页，如果不满则标记 isAutoLoading=true，递归执行继续搜索，直到占满一页，点击搜索结果的某一歌曲会执行 action 去添加歌曲，会修改 sequenceList、playList、currentIndex、isPlaying、isFullScreen，会查找新增的歌曲是否已存在两个 List 中，不在会 push，currentIndex 修改为这首新增的歌曲，并取消暂停和开启全屏
    4. 搜索历史会保存在 state 和 localStorage 中
+9. 多标签之间通信
+   1. 一个标签开始播放，其他所有标签暂停播放
+   2. 开始播放时修改 localStorage 中的 key，监听该 key 如果发生修改则改 vuex 状态暂停播放
+   3. localStorage 监听事件只会在 key 的值发生了变化才会触发，所以每次改 key 时都要设它的值为 uid
 
 
 ```js
@@ -197,7 +201,21 @@ app.directive('loading', loadingDirective)
 3. 播放时计算当前时间离下一句歌词的时间差，通过 setTimeout() 在对应时间执行该行歌词的回调函数，然后递归继续播放
 4. 暂停时先记录以下暂停的时间戳，下次播放从暂停处开始
 
-## 多标签页共享播放列表
+## 多标签页共享状态
 
-1. 推荐歌单歌曲、歌手歌曲、排行榜歌曲通过组件 MusicList 选择点击某一歌曲会将列表中的歌曲进行顺序播放，执行 sequentialPlay action，点击随机播放则执行 randomPlay action；搜索歌曲点击某一首会执行 addSong action；mini 播放器的播放列表删除某一首歌会执行 removeSong action，清空列表会执行 clearSongList action
-2. 
+1. 需求
+   1. 一个标签播放，其他所有标签全部自动暂停
+   2. 一个标签修改播放列表，其他所有标签同步列表；如果从列表中删除了歌曲 A，则其他标签如果当前歌曲是 A，就会将当前歌曲重置为 index=0，如果不是 A 则不作处理
+2. 实现
+   1. localStorage 保存标记 \_\_stop-other-playing\_\_ 布尔值，一旦监听到其他标签让它发生变化，则当前标签要执行暂停键的逻辑，即直接修改 isPlaying=false
+   2. localStorage 保存同步数据对象 \_\_sync-playList-data\_\_，
+      1. 当 A 标签通过歌曲列表点击某一首歌进行顺序播放，会将顺序列表和当前下标放入同步数据中，B 标签收到后，如果 B 标签是顺序播放或单曲循环，则同步顺序列表、播放列表、当前下标；如果 B 标签是随机播放，则只同步顺序列表，然后生成随机播放列表，再在新的随机列表中找到 A 正在播放的歌曲下标设为自己的当前下标
+      2. 当 A 标签在搜索结果中加入一首歌后，会同步顺序列表和当前下标，B 标签做跟上面相同的操作
+      3. 当 A 标签在 mini 播放列表中删除某一首歌后，只同步顺序列表，当前下标设为-1表示不同步该数据；B 标签则按 (a.) 的规则同步自己的顺序列表和播放列表，如果 B 的当前歌曲仍在列表中，则继续设其为当前歌曲；否则重设为下标=0
+      4. 当 A 标签清空了 mini 播放列表，只同步顺序列表，当前下标设为-1表示不同步该数据；B 标签则按 (c.) 相同的逻辑处理
+3. 补充
+   1. 当【其他】标签页修改了 localStorage 中的值，且新值与旧值不同才会触发 storage 事件 
+4. 推荐歌单歌曲、歌手歌曲、排行榜歌曲通过组件 MusicList 选择点击某一歌曲会将列表中的歌曲进行顺序播放，执行 sequentialPlay action，点击随机播放则执行 randomPlay action；搜索歌曲点击某一首会执行 addSong action；mini 播放器的播放列表删除某一首歌会执行 removeSong action，清空列表会执行 clearSongList action
+
+监听axios请求的话是通过注入js替换windows上的XHR对象，监听fetch是通过definepototype监听fetch实现
+

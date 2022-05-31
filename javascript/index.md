@@ -163,11 +163,11 @@ function flattenArray(array) {
 ```js
 // 防抖
 function debounce(fn, waitTime){
-  let timer = null
+  let timer = 0
   return function (){
-    if(timer){
+    if(timer>0){
       clearTimeout(timer)
-      timer = null
+      timer = 0
     }
     timer = setTimeout(()=>{
       // this = 调用debounceSay()的上下文
@@ -177,17 +177,27 @@ function debounce(fn, waitTime){
   }
 }
 // 节流
-function throttle(fn, delayTime){
-  let timer = null
-  return function(){
-    if(timer){
+function throttle (fn, delay) {
+  let timeoutId = 0
+  let lastRun = 0
+  function wrapper (...args) {
+    if (timeoutId > 0) {
       return
     }
-    timer = setTimeout(()=>{
-      fn.apply(this, arguments)
-      timer = null
-    }, delayTime)
+    const self = this
+    const pastTimeSinceLastRun = Date.now() - lastRun
+    const runFn = function () {
+      lastRun = Date.now()
+      timeoutId = 0
+      fn.apply(self, args)
+    }
+    if (pastTimeSinceLastRun >= delay) {
+      runFn()
+    } else {
+      timeoutId = window.setTimeout(runFn, delay)
+    }
   }
+  return wrapper
 }
 
 const say = (str) => {console.log('I say: ', str)}
@@ -198,4 +208,23 @@ const throttleSay = throttle(say, 3000)
 // <button onclick="debounceSay('防抖')">防抖按钮</button>
 ```
 
+## 图片懒加载的实现
 
+1. 先将图片的 src 设为默认的图片，判断图片如果出现在视图中才将 src 设为原本的图片
+2. 判断图片是否在视图中的两种方法：
+   1. 监听图片的第一个可滚动父元素和 window 对象的滚动相关事件（scroll、resize、touchmove 等），回调函数中通过 getBoundingClientRect() 方法获取元素离视图的顶部和左侧的距离，再与视图宽高 innerWidth、innerHeight 作比较，如果距离在宽高之内说明出现在视图中了
+   2. IntersectionObserver：创建一个 IntersectionObserver 对象去 observe 图片元素，假如元素的可见性发生变化就会执行回调函数
+
+## addEventListener() 第三个参数
+
+```js
+el.addEventListener(event, myHandler, {
+  once: false, // 是否单次监听，默认 false
+  passive: true, // true = 忽略不执行 myHandler 中的 preventDefault()；默认 false
+  capture: false // true = 事件由外向内触发；false = 事件从内向外冒泡；默认 false
+})
+```
+
+## 多标签页之间通信的方法
+
+1. 
