@@ -172,6 +172,13 @@ $rw: 200px; // 右固定宽度
 3. justify-content 可指定元素在主轴上的排列方式；align-items 可指定元素在交叉轴上的排列方式；flex-wrap 规定换行方式
 4. 可通过 flex-grow、flex-shrink 来指定当排列空间有剩余时，元素的放大缩小比例
 
+## position 属性
+
+1. static：默认值，未定位
+2. absolute：相对于最近的非 static 父元素定位，如果没有则相对于 body 定位，受滚动影响
+3. fixed：相对于视图定位，不受滚动影响
+4. relative：相对于元素自身的原位置定位
+
 ## 常用属性
 
 ```scss

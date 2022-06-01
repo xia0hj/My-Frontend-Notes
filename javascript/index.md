@@ -225,6 +225,19 @@ el.addEventListener(event, myHandler, {
 })
 ```
 
+## event loop 事件循环
+
+1. js 是单线程运行的，在运行时会将函数的上下文放入执行栈 call stack 中保证代码的有序执行；
+2. event loop 流程：
+   1. 宏任务放入执行栈，执行同步代码
+   2. 把微任务放入执行栈，直至微任务队列为空
+   3. DOM 渲染，这一步由浏览器判断是否需要，可能会不执行
+   4. 回到第一步，把下一个宏任务放入执行栈，开启下一轮的宏任务
+3. 宏任务包括：js 脚本代码、setTimeout、setInterval 等，所以当遇到 setTimeout 时，延迟之后会将其回调函数放入宏任务队列，最快也要等当前这一轮宏任务的同步代码执行完后才有机会去执行它
+4. 微任务包括：Promise 的回调函数、async/await 语法、fetch 等；当前宏任务产生的微任务，会在宏任务执行完毕后，下一轮宏任务开启前，全部按序执行直到清空微任务队列，
+
 ## 多标签页之间通信的方法
 
-1. 
+1. localStorage：将数据保存在浏览器中，同域共享存储空间，提供事件 storage 监听数据变化，当其他标签页修改了 localStorage 的值时触发，注意如果新值与旧值相同是不会触发该事件的
+2. setInterval + cookie：发送消息的页面将数据保存在 cookie 中，接收消息的页面通过 setInterval 轮询 cookie
+3. postMessage：
