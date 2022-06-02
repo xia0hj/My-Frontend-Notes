@@ -187,3 +187,47 @@ function setBit(num, index, boolVal) {
   }
 }
 ```
+
+## 二叉搜索树删除某节点
+
+[leetcode 450. 删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst/)
+
+1. 如果目标节点大于当前节点值，则去右子树中删除；
+2. 如果目标节点小于当前节点值，则去左子树中删除；
+3. 如果目标节点就是当前节点，分为以下三种情况：
+   1. 其无左子：其右子顶替其位置，删除了该节点；
+   2. 其无右子：其左子顶替其位置，删除了该节点；
+   3. 其左右子节点都有：其左子树转移到其右子树的最左节点的左子树上，然后右子树顶替其位置，由此删除了该节点。
+
+```js
+var deleteNode = function (root, key) {
+  if (!root) {
+    // 兼容找不到目标节点的情况
+    return null
+  } else if (key > root.val) {
+    // 如果目标节点大于当前节点值，则去右子树中删除
+    root.right = deleteNode(root.right, key)
+  } else if (key < root.val) {
+    // 如果目标节点小于当前节点值，则去左子树中删除
+    root.left = deleteNode(root.left, key)
+  } else if (key === root.val) {
+    if (root.left === null) {
+      // 如果目标节点无左子，其右子顶替其位置，使目标节点被移出
+      return root.right
+    } else if (root.right === null) {
+      // 如果目标节点无右子，其左子顶替其位置，使目标节点被移出
+      return root.left
+    } else if (root.left && root.right) {
+      // 如果目标节点左右子都有，将其左子树拼接到其右子树最左节点的左子上，然后由右子树顶替目标节点位置
+      // 找到 右子树 的 最左节点
+      let rightMin = root.right
+      while (rightMin.left !== null) rightMin = rightMin.left
+      // 将 目标节点 的 左子树 拼接到 右子树最左 的 左子
+      rightMin.left = root.left
+      // 右子树顶替目标节点
+      return root.right
+    }
+  }
+  return root
+};
+```
