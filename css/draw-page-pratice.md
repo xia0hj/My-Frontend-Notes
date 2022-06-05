@@ -10,7 +10,7 @@
 6. 面试考画页面的话，一定要多注意这类细节，还有比如BEM命名、1px边框等问题是否有意识，这些都要考虑
 
 ```html
-<div class="top"/>
+<div class="top"></div>
 <ul class="list"></ul>
 <div class="bottom">
   <button class="btn">按钮1</button>
@@ -19,7 +19,21 @@
   <button class="btn">按钮4</button>
 </div>
 
+<script>
+const list = document.getElementsByClassName('list')[0]
+const li = document.createElement('li')
+for(let i=0; i<100; i++){
+  const child = li.cloneNode()
+  child.innerText = `填充中间列表 i=${i}`
+  list.appendChild(child)
+}
+</script>
+
 <style>
+* {
+  padding: 0;
+  margin: 0;
+}
 .top {
   /* 注意看上面说明为什么不用 fixed */
   position: absolute;

@@ -46,10 +46,14 @@
    2. 搜索栏输入时防抖，停止输入后 300 毫秒才会返回数据
    3. 搜索结果组件 props 是搜索关键字并 watch 它，一旦发生改变会进行第一次搜索，等 nextTick 后判断结果是否占满一页，如果不满则标记 isAutoLoading=true，递归执行继续搜索，直到占满一页，点击搜索结果的某一歌曲会执行 action 去添加歌曲，会修改 sequenceList、playList、currentIndex、isPlaying、isFullScreen，会查找新增的歌曲是否已存在两个 List 中，不在会 push，currentIndex 修改为这首新增的歌曲，并取消暂停和开启全屏
    4. 搜索历史会保存在 state 和 localStorage 中
-9. 多标签之间通信
-   1. 一个标签开始播放，其他所有标签暂停播放
-   2. 开始播放时修改 localStorage 中的 key，监听该 key 如果发生修改则改 vuex 状态暂停播放
-   3. localStorage 监听事件只会在 key 的值发生了变化才会触发，所以每次改 key 时都要设它的值为 uid
+9. 性能优化
+   1. 图片懒加载，封装成指令
+   2. keep-alive 组件包裹 router-view，因为像歌手列表、歌单列表这些页面会来回切换，每次进入页面就会去请求接口；其实这些数据实时性不强，不会频繁改动，可以用 keep-alive 将页面缓存起来
+   3. 用了 vue 自带的路由异步加载，避免所有 js 都打包进 app.js 里面
+   4. 不需要双向绑定的数据，不要写在 data 里面，可以在 created 中创建
+   5. gzip 压缩，安装插件 compression-webpack-plugin，最新版本 10.0 但 vue3 不支持，改为安装 5.0 版本，第三方库打包文件 chunk-verdors.js 从 270k 压缩到 90k
+   6. terser-webpack-plugin 插件压缩 js，
+   7. 通过 CDN 引入第三方库，chunk-verdors.js 从 270k 减小到 140k，gz 压缩从 90k 减小到 45k
 
 
 ```js
