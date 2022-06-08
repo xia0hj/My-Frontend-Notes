@@ -73,3 +73,92 @@ for(let i=0; i<100; i++){
 }
 </style>
 ```
+
+## 微信聊天窗口简易布局
+
+```html
+<div class="container">
+  <div class="top">与 XXX 的聊天</div>
+  <div class="chat-wrapper">
+    <div class="chat-row row-left">
+      <div class="head"></div>
+      <div class="chat-content">喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？喂，在吗？</div>
+    </div>
+    <div class="chat-row row-right">
+      <div class="head"></div>
+      <div class="chat-content">不在</div>
+    </div>
+  </div>
+  <div class="bottom">
+    <input class="input"/>
+    <button>发送</button>
+  </div>
+</div>
+
+<style>
+/* 容器 */
+.container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+}
+
+/* 吸顶标题栏，文字居中 */
+.top {
+  height: 3rem;
+  background-color: lightblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 吸底栏 */
+.bottom {
+  height: 3rem;
+  background-color: lightblue;
+  display: flex;
+}
+.bottom .input {
+  margin: 0.4rem;
+  flex-grow: 1;
+}
+
+/* 聊天内容容器 */
+.chat-wrapper {
+  background-color: lightcoral;
+  flex-grow: 1;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+}
+/* 隐藏滚动条 */
+.chat-wrapper::-webkit-scrollbar{
+  display: none;
+}
+/* 每条聊天数据 */
+.chat-row {
+  display: flex;
+  margin: 2rem 0 2rem 0;
+}
+/* 对方说话，靠左 */
+.row-left {
+  flex-direction: row;
+}
+/* 自己说话，靠右 */
+.row-right {
+  flex-direction: row-reverse;
+}
+/* 头像 */
+.head {
+  width: 3rem;
+  height: 3rem;
+  background-color: lightgreen;
+}
+/* 聊天内容 */
+.chat-content {
+  max-width: 20rem;
+  background-color: lightsteelblue;
+}
+</style>
+```

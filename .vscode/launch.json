@@ -18,6 +18,16 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/scratch/scratch.js",
+      "runtimeExecutable": "babel-node",
+      "sourceMaps": true
+    },
+    {
+      "name": "测试响应式",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/vue/reactive/test.js",
+      "runtimeExecutable": "babel-node",
+      "sourceMaps": true
     },
   ]
 }

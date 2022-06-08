@@ -1,19 +1,5 @@
 # Vue笔记
 
-## 实践容易忘记的地方
-1. chrome source标签中不显示src，解决：ctrl+P，然后输入?，选择Run Command，搜索source map相关命令，开启
-2. 源码入口文件：src/platform/runtime/index.js -> src/core/index.js -> src/core/instance/index.js
-3. v-bind:class="{ classA: shouldClassAShow, classB: shouldClassBShow }" 由两个变量分别控制 classA 和 classB 是否生效
-
-## vm属性
-
-### Vue.prototype
-1. Vue.prototype._render(): 调用vm.$options.render()得到VNode并返回
-
-### 实例vm
-1. vm._VNode: 旧的VNode
-2. vm.$options: new Vue()对象的各个属性，例如data, props等
-
 ## Vue生命周期
 
 1. 创建一个vue的实例对象，然后在这个对象上创建一些生命周期函数和默认的事件
@@ -64,7 +50,7 @@
 ## computed和watch的区别
 
 1. computed 是计算一个新的属性，并将该属性挂载到 Vue 实例上，而 watch 是监听已经存在且已挂载到 Vue 实例上的数据，所以用 watch 同样可以监听 computed 计算属性的变化
-2. computed本质是惰性求值的watch，只有当依赖属性变化后第一次访问computed才会计算新的值；而watch则是数据一旦发生变化就会执行回调函数
+2. computed本质是惰性求值的watch，只有当依赖属性变化后第一次访问 computed 才会计算新的值；而 watch 则是数据一旦发生变化就会执行回调函数
 3. 从使用场景上说，computed 适用一个数据被多个数据影响，而 watch 适用一个数据影响多个数据
 
 ## v-model
@@ -81,9 +67,9 @@
 <my-component v-bind:value="msg" v-on:input="msg=argument[0]" />
 ```
 
-## Vue实现过渡动画（未完成）
+## Vue 实现过渡动画
 
-1. 使用vue的 transition 标签结合 css 样式实现
+1. 使用 vue 的 transition 标签结合 css 样式实现
    1. v-enter：元素进入动画的初始样式
    2. v-enter-to：元素进入动画最后的样式，一般不去定义这个 class，因为一般来说进入动画的结果就是元素本来的样式
    3. v-enter-active：定义了元素从 v-enter 到 v-enter-to 过渡变化所需时间及变化方式等
@@ -91,17 +77,60 @@
    5. v-leave-to
    6. v-leave-active
    7. 在 transition 标签中可通过 name 属性替换过渡 css 类名前缀的 v
+2. 使用 vue 的钩子函数实现动画，通过 v-on 监听 transition 标签的 before-enter，enter，after-enter，leave 事件
 
+## vue Router 原理
 
+1. 哈希模式
+   1. \# 符号本来的作用是加在 url 后面表示网页中的当前位置，哈希值保存在 window.location.hash 中，可直接修改
+   2. 改变哈希不会重新加载页面；每次改变哈希时会触发 hashchange 事件
+2. history 模式：使用 HTML 提供的 pushState 和 replaceState 方法去修改历史记录，虽然当前 url 改变了，但浏览器不会去请求页面，这样就可以用来更新视图而不重新请求页面
+3. 对比
+   1. 哈希模式在 url 有个井号，而 history 模式没有，更美观
+   2. pushState 可以设置与当前 url 同源的任意 url，而哈希模式只能修改井号后边的内容
+   3. pushState 设置的新 url 与当前的相同时也会放入历史记录栈里面，而哈希模式只有新的和旧的不同才会放入栈中
 
+## vue router 怎样配置 404 页面
 
+在路由配置的最后设一个 * 号，路由是从上到下开始匹配的，星号表示全匹配，如果前面的路由都匹配不上，就用最后的这个星号兜底
 
+```js
+routes: [
+   {path:'/a', compnent: a},
+   {path:'/b', compnent: b},
+   {
+      path: '*',
+      component: NotFound
+   }
+]
+```
 
-## $route和$router的区别（未完成）
+## $route 和 $router 的区别
+
+1. \$router 用来操作路由，\$route 用来获取路由信息
+2. \$route 是当前激活的路由信息对象，每个路由都有一个自己的 route 对象，包含了当前路由的路径、参数、名字等信息
+3. \$router 可以看做是管理一组 route 的容器，包含了很多关键的属性，例如跳转方法、history 对象
+
 
 
 
 ## key的作用（未完成）
 1. key的作用主要是为了更高效的更新虚拟DOM
 2. vue在更新过程中判断两个节点是否相同时，key是其中一个判断条件，
+
+## 实践容易忘记的地方
+1. chrome source标签中不显示src，解决：ctrl+P，然后输入?，选择Run Command，搜索source map相关命令，开启
+2. 源码入口文件：src/platform/runtime/index.js -> src/core/index.js -> src/core/instance/index.js
+3. v-bind:class="{ classA: shouldClassAShow, classB: shouldClassBShow }" 由两个变量分别控制 classA 和 classB 是否生效
+
+## vm属性
+
+### Vue.prototype
+
+1. Vue.prototype._render(): 调用vm.$options.render()得到VNode并返回
+
+### 实例vm
+
+1. vm._VNode: 旧的VNode
+2. vm.$options: new Vue()对象的各个属性，例如data, props等
   

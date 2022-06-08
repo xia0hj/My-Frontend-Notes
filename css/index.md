@@ -165,12 +165,48 @@ $rw: 200px; // 右固定宽度
 }
 ```
 
-## flex弹性布局
+## flex 弹性布局
 
 1. flex是CSS3新增的布局方式，将一个元素的display属性设为flex从而使它成为flex布局容器
 2. 容器有两条轴，一个是水平的主轴，一个与主轴垂直的交叉轴，可通过 flex-direction 属性指定主轴的方向
-3. justify-content 可指定元素在主轴上的排列方式；align-items 可指定元素在交叉轴上的排列方式；flex-wrap 规定换行方式
+3. justify-content 可指定元素在主轴上的排列方式；align-items 可指定元素在交叉轴上的排列方式；
 4. 可通过 flex-grow、flex-shrink 来指定当排列空间有剩余时，元素的放大缩小比例
+5. 定义在容器上的属性：
+   1. justify-content: 子元素在主轴上的排列方式，居中 = center
+   2. align-items: 定义主轴上的元素在交叉轴上如何对齐，居中 = center
+   3. flex-direction: 主轴方向
+   4. flex-wrap: 当一根主轴放不下时该如何换行
+   5. flex-flow: 简写 方向+换行
+   6. align-content: 多根主轴在容器中如何对齐
+6. 定义在元素上的属性：
+   1. flex-grow: 主轴空间有余时元素放大比例，默认 0 不放大
+   2. flex-shrink: 主轴空间有余时元素缩小比例，默认 0 不缩小
+   3. flex-basis: 主轴空间大小，根据这个属性判断是否有多余空间让元素缩放，默认占满容器
+   4. flex: 简写 放大+缩小+主轴空间
+   5. align-self: 覆盖容器的 align-items，允许单个元素有不同的交叉轴对齐方式
+   6. order: 排列顺序，默认 0，小的在前
+
+## grid 网格布局
+
+1. 定义在容器上的属性：
+   1. grid-template-columns：划分列，属性值可使用关键字 repeat，auto-fill，auto，fr，minmax
+   2. grid-template-rows：划分行
+   3. grid-auto-flow：row=先行后列，column=先列后行
+   4. justify-items：单元格内容水平对齐方式
+   5. align-items：单元格内容垂直对齐方式
+   6. justify-content：整个内容区域在容器内的水平对齐方式
+   7. align-content：整个内容区域在容器内的垂直对齐方式
+   8. place-content：简写，整个内容区域在容器内的水平对齐 + 垂直对齐
+2. 定义在单元格上的属性：
+   1. grid-column-start：从哪一列开始，可使用关键字 span 表示跨多少个格
+   2. grid-column-end：从哪一列结束
+   3. grid-column：简写，所占列的开始和结束，中间要加斜杠 /
+   4. grid-row-start：从哪一行开始
+   5. grid-row-end：从哪一行结束
+   6. grid-row：简写，所占行的开始和结束，中间要加斜杠 /
+   7. justify-self：单元格内容的水平对齐方式，覆盖容器的 justify-item
+   8. align-self：单元格内容的垂直对齐方式，覆盖容器的 align-item
+   9. place-self：单元格内容的水平+垂直对齐方式
 
 ## position 属性
 
@@ -179,10 +215,24 @@ $rw: 200px; // 右固定宽度
 3. fixed：相对于视图定位，不受滚动影响
 4. relative：相对于元素自身的原位置定位
 
+## CSS 画三角形
+
+```css
+.triangle {
+  /* 宽高设为 0 */
+  /* 设边界的宽度并设为透明 */
+  /* 设置想要的三角形的颜色 */
+  width: 0;
+  height: 0;
+  border: 60px solid transparent;
+  border-bottom-color: lightblue;
+}
+```
+
 ## 常用属性
 
 ```scss
-// 外边距的上下为0，左右自适应延伸，使内容居中
+// 外边距的上下为0，左右自适应延伸，使内容居中；由于块元素默认占满一行所以可以水平居中，但垂直方向上不行
 margin: 0 top;
 
 // 脱离文档流，相对于视窗来定位，与滚动无关
