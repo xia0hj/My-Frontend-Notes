@@ -47,7 +47,7 @@
 6. event bus: \$emit表示由当前组件派发事件，\$on表示监听当前组件派发的事件，可以创建一个无DOM的Vue组件并将实例绑定在原型上Vue.prototype.$EventBus=new Vue()，通过this.\$emit()和this.\$on()来实现跨组件通信，注意要在main.js中根节点mount之前将bus绑定到原型
 7. vuex
 
-## computed和watch的区别
+## computed 和 watch 的区别
 
 1. computed 是计算一个新的属性，并将该属性挂载到 Vue 实例上，而 watch 是监听已经存在且已挂载到 Vue 实例上的数据，所以用 watch 同样可以监听 computed 计算属性的变化
 2. computed本质是惰性求值的watch，只有当依赖属性变化后第一次访问 computed 才会计算新的值；而 watch 则是数据一旦发生变化就会执行回调函数
@@ -79,7 +79,7 @@
    7. 在 transition 标签中可通过 name 属性替换过渡 css 类名前缀的 v
 2. 使用 vue 的钩子函数实现动画，通过 v-on 监听 transition 标签的 before-enter，enter，after-enter，leave 事件
 
-## vue Router 原理
+## Vue Router 原理
 
 1. 哈希模式
    1. \# 符号本来的作用是加在 url 后面表示网页中的当前位置，哈希值保存在 window.location.hash 中，可直接修改
@@ -90,7 +90,7 @@
    2. pushState 可以设置与当前 url 同源的任意 url，而哈希模式只能修改井号后边的内容
    3. pushState 设置的新 url 与当前的相同时也会放入历史记录栈里面，而哈希模式只有新的和旧的不同才会放入栈中
 
-## vue router 怎样配置 404 页面
+## Vue Router 怎样配置 404 页面
 
 在路由配置的最后设一个 * 号，路由是从上到下开始匹配的，星号表示全匹配，如果前面的路由都匹配不上，就用最后的这个星号兜底
 
@@ -111,7 +111,7 @@ routes: [
 2. \$route 是当前激活的路由信息对象，每个路由都有一个自己的 route 对象，包含了当前路由的路径、参数、名字等信息
 3. \$router 可以看做是管理一组 route 的容器，包含了很多关键的属性，例如跳转方法、history 对象
 
-## vue key 的作用
+## Vue key 的作用
 
 1. key 的作用主要是 为了实现高效的更新虚拟 DOM，提高性能。
 2. 其原理是 vue 在 diff 的过程中通过 key 可以精准的判断两个节点是否是同一个，从而避免频繁的更新元素，使得整个 diff 过程更加高效，减少DOM操作量
@@ -129,24 +129,7 @@ routes: [
 4. 假如对比结束后，旧开始和旧末尾指针之间还有节点，说明这些是被删除的节点，直接删掉
 5. 假如对比结束后，新开始和新末尾指针之间还有节点，说明这些是新增的节点，将它们插入到旧开始节点的前面
 
-## vue scoped 原理
+## Vue scoped 原理
 
 给组件的 DOM 都加了用于确保唯一性的属性 data-v-加上 8 位随机数，然后给对应的 CSS 的选择器加上属性选择器，这样来实现样式隔离
-
-## 实践容易忘记的地方
-
-1. chrome source标签中不显示src，解决：ctrl+P，然后输入?，选择Run Command，搜索source map相关命令，开启
-2. 源码入口文件：src/platform/runtime/index.js -> src/core/index.js -> src/core/instance/index.js
-3. v-bind:class="{ classA: shouldClassAShow, classB: shouldClassBShow }" 由两个变量分别控制 classA 和 classB 是否生效
-
-## vm属性
-
-### Vue.prototype
-
-1. Vue.prototype._render(): 调用vm.$options.render()得到VNode并返回
-
-### 实例vm
-
-1. vm._VNode: 旧的VNode
-2. vm.$options: new Vue()对象的各个属性，例如data, props等
   
