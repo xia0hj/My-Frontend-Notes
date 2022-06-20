@@ -5,3 +5,5 @@
 5. [算法](./notes/algorithm/index.md)
 6. [工具](./notes/tools/index.md)
 7. [后端相关](./notes/backend/index.md)
+
+`node pack.js`将以上文件合并，方便阅读
