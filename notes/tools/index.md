@@ -56,3 +56,11 @@ npm i -D @babel/core
 # 常用的预设一系列 babel 插件
 npm i -D @babel/preset-env
 ```
+
+## webpack-dev-server 开发
+
+1. `npm i -D webpack webpack-cli webpack-dev-server html-webpack-plugin`
+
+2. webpack.config.js 中配置 `entry，output，plugin，devServer，mode，devtool='eval-source-map'`
+
+3. 在 chrome devtool 中直接打断点

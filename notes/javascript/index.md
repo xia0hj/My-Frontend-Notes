@@ -1,71 +1,78 @@
-# JavaScript笔记
+## JS 的数据类型
 
-## JavaScript的基本数据类型和引用数据类型
+1. 基本数据类型有 String、Number、Boolean、Undefined、Null，还有 es6 新增的 Symbol，es10 新增了 BigInt；引用类型有对象、数组、函数 3 种。
+2. 区别是存储位置不同：
+   1. 基本数据类型直接存储在栈中的简单数据段，占据空间小，属于频繁使用的数据，所以保存在栈中。
+   2. 引用类型因为占据空间大，而且大小不固定，所以是保存在堆中。
+   3. 引用类型在栈中存储了指针，指向它在堆中的地址。
 
-1. 基本数据类型有 String, Number, Boolean, Undefined, Null, es6新增的Symbol, es10新增的BigInt
-2. Symbol 代表创建后独一无二且不可变的数据类型，可以用作复杂对象的属性key，避免属性重名覆盖，也可以用来实现私有属性
-3. 引用数据类型有对象、函数、数组3种
-4. 区别是存储位置不同。原始数据类型直接存储在栈中的简单数据段，占据空间小、大小固定，属于被频繁使用数据，所以放入栈中存储。引用数据类型存储在堆（heap）中的对象，占据空间大、大小不固定。如果存储在栈中，将会影响程序运行的性能；引用数据类型在栈中存储了指针，该指针指向堆中该实体的起始地址。当解释器寻找引用值时，会首先检索其在栈中的地址，取得地址后从堆中获得实体。
+## undefined 和 null 的区别
 
-## undefined和null的区别
+1. undefined 表示未定义，变量声明后但没有赋值就是 undefined；null 表示空对象，一般是赋值给对象作为初始值。
+2. 用 typeof 判断，null = 'object'，undefined = 'undefined'。
+3. 转换成 Number 类型，null = 0，undefined = NaN。
+4. null 是保留的关键字，而 undefined 不是。
 
-1. undefined代表未定义，null代表空对象。一般变量声明了但没有赋值就是undefined，null主要赋值给对象作为初始值
-2. null是保留的关键字，而undefined不是
+## == 和 === 的区别
 
-## ==和===的区别
-
-1. ==比较基本数据类型时，如果类型不同会进行强制转换后再比较
-2. ===比较基本数据类型时，先比较类型再比较值，类型不同值为false，不进行转换
-3. 在比较引用数据类型时，==和===都是比较内存地址
+1. == 比较基本类型，如果类型不同，会先强制转换后再比较。
+2. === 比较基本类型，先比较类型再比较值，如果类型不同就返回 false，不进行转换。
+3. 在比较引用类型时，== 和 === 都是比较地址。
 
 ## use strict 严格模式
 
-1. use strict 指的是严格运行模式，在这种模式对 js 的使用添加了一些限制。
-2. 比如说禁止 this 指向全局对象，还有禁止使用 with 语句等。
-3. 设立严格模式的目的，主要是为了消除代码使用中的一些不安全的使用方式，也是为了消除 js 语法本身的一些不合理的地方，以此来减少一些运行时的怪异的行为。
+1. use strict 指的是严格运行模式，在这种模式对 js 的使用添加了一些限制，目的是消除代码中一些不合理的使用方式。
+2. 严格模式的限制：
+   1. 不允许使用未声明的变量；
+   2. 不允许用 delete 关键字删除变量；
+   3. 不允许变量重名；
+   4. 禁止 this 关键字指向全局对象；
+   5. ...
 
-## isNaN()和Number.isNaN()区别
+## window.isNaN() 和 Number.isNaN() 的区别
 
-1. isNaN()会尝试将参数类型转换数字，任何不能被转换为数值的都会返回true，因此传入非数字会返回true
-2. Number.isNaN()会首先判断参数类型是否数字，如果传入非数字会直接返回false，是数字才会继续判断
+1. window.isNaN() 会尝试去将参数的类型转换成数字，如果不能被转换成数字都返回 true。
+2. Number.isNaN() 会先判断参数的类型是不是 Number，如果不是 Number 都返回 false。
 
-## 其他类型转换成 false
+## 其他数据类型转换成 false
 
-1. 0
-2. NaN
-3. null
-4. undefined
+1. undefined
+2. null
+3. 0
+4. NaN
 5. ""
+6. 其余都转换成 true
 
-## new做了什么及其实现
+## new 操作符做了什么及其代码实现
 
-1. 首先创建一个空对象
-2. 设置原型，将对象的原型设置为函数的 prototype 对象
-3. 让函数的 this 指向这个新对象，执行构造函数的代码（为这个新对象添加属性）
-4. 判断构造函数返回值的类型，如果是引用类型就将它返回，否则将上面创建的新对象返回
+1. 首先创建一个空对象，并将空对象的原型设为构造函数的 prototype。
+2. 让构造函数的 this 指向这个新对象，然后执行。
+3. 如果构造函数返回的是引用类型，就直接将它返回；否则返回新对象。
 
 ```js
-function newFn(){
-  const constructor = Array.prototype.shift.call(arguments) // 从参数列表中移除并取出第一个参数
-  if(typeof constructor !== 'function'){
-    console.warn('type error')
-    return
-  }
-
-  const newObject = Object.create(constructor.prototype) // 创建空对象，并把对象原型设为构造函数的prototype
-  const result = constructor.apply(newObject, arguments) // 相当于newObject.constructor(args)，并使this指向newObject
-
-  if(result && (typeof result==='object' || typeof result==='function')){
-    // 如果构造函数返回值是引用类型(对象、数组、函数)，则直接返回
-    return result
-  }else{
-    // 否则返回创建的新对象
-    return newObject
-  }
+function newOperation(constructor, ...args){
+   if(typeof constructor !== 'function'){
+      throw new TypeError('constructor is not a function')
+   }
+   const obj = Object.create(constructor.prototype) // obj.__proto__ = constructor.prototype
+   const fnReturn = constructor.apply(obj, args)
+   if(typeof fnReturn === 'object' || typeof fnReturn === 'function'){
+      return fnReturn
+   }else{
+      return obj
+   }
 }
-// const obj = newFn(构造函数, 参数...)
-// const obj = new 构造函数(参数)
+// 自测
+function fn(msg){this.msg=msg}
+const a = new fn('aaa')
+const b = newOperation(fn, 'bbb')
 ```
+
+## arguments对象和剩余参数 ...args 的区别
+
+1. arguments 对象包含所有参数，剩余参数只能放在最后且只包含没有对应形参的参数
+2. arguments 对象不是数组，不能直接使用数组的方法，需要这样才能用数组的方法 `Array.prototype.push.call(arguments, newVal)`
+3. 剩余参数是真正的数组
 
 ## 作用域和变量提升
 
@@ -90,7 +97,7 @@ function newFn(){
 1. 每个构造函数内部都有一个 prototype 属性值，它是一个对象，包含了一些共享的属性和方法，由构造函数创建的对象都会共享这些属性
 2. 使用构造函数创建的对象，内部有 \_\_proto\_\_ 指针指向构造函数的 prototype 来让我们访问原型，也可以使用 Object.getPrototypeOf() 方法来获取原型
 3. 当我们访问一个对象的属性时，如果对象内部不存在这个属性，就会到它的原型对象上去寻找属性，原型对象又会有自己的原型，这样一直找下去就是原型链。
-4. 原型链的尽头一般是Object.prototype，这也是我们新建的对象能够使用 toString 等常用方法的原因
+4. 原型链的尽头一般是 Object.prototype，这也是我们新建的对象能够使用 toString 等常用方法的原因
 
 ## 闭包
 
@@ -170,42 +177,44 @@ function flattenArray(array) {
 
 ```js
 // 防抖
-function debounce(fn, waitTime){
-  let timer = 0
-  return function (){
-    if(timer>0){
-      clearTimeout(timer)
-      timer = 0
+function debounce(fn, delay){
+  let timeoutId = 0
+  return function wrappedFn (){
+    if(timeoutId > 0){
+      clearTimeout(timeoutId)
+      timeoutId = 0
     }
-    timer = setTimeout(()=>{
-      // this = 调用debounceSay()的上下文
-      // arguments = '呃呃'
-      fn.apply(this, arguments)
-    }, waitTime)
+    const self = this
+    const args = arguments
+    timeoutId = setTimeout(()=>{
+      // 注意要取的是 wrappedFn 的 this 和参数
+      fn.apply(self, args)
+    }, delay)
   }
 }
 // 节流
-function throttle (fn, delay) {
+function throttle (fn, interval) {
   let timeoutId = 0
   let lastRun = 0
-  function wrapper (...args) {
+  return function wrappedFn () {
     if (timeoutId > 0) {
       return
     }
     const self = this
+    const args = arguments
     const pastTimeSinceLastRun = Date.now() - lastRun
-    const runFn = function () {
+    function runFn () {
       lastRun = Date.now()
       timeoutId = 0
+      // 注意要取的是 wrappedFn 的 this 和参数
       fn.apply(self, args)
     }
-    if (pastTimeSinceLastRun >= delay) {
+    if (pastTimeSinceLastRun >= interval) {
       runFn()
     } else {
-      timeoutId = window.setTimeout(runFn, delay)
+      timeoutId = window.setTimeout(runFn, interval)
     }
   }
-  return wrapper
 }
 
 const say = (str) => {console.log('I say: ', str)}
