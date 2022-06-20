@@ -10,6 +10,21 @@
 ## vue
 
 1. vue2.0 不能使用最新版本的 sass-loader，要使用 npm i -D sass-loader@8.0.0
+2. vue 源码入口文件：src/platform/runtime/index.js -> src/core/index.js -> src/core/instance/index.js
+3. v-bind:class="{ classA: shouldClassAShow, classB: shouldClassBShow }" 由两个变量分别控制 classA 和 classB 是否生效
+
+## Vue.prototype
+
+1. Vue.prototype._render(): 调用vm.$options.render()得到VNode并返回
+
+## vm 实例属性
+
+1. vm._VNode: 旧的VNode
+2. vm.$options: new Vue()对象的各个属性，例如data, props等
+
+## 调试 && 工具
+
+1. chrome source标签中不显示src，解决：ctrl+P，然后输入?，选择Run Command，搜索source map相关命令，开启
 
 ## 约定式提交
 
