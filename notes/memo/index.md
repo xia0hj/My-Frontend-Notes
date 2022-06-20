@@ -1,4 +1,4 @@
-# 未分类，可能有用的
+# 备忘录
 
 ## js
 
@@ -11,9 +11,16 @@
 
 1. vue2.0 不能使用最新版本的 sass-loader，要使用 npm i -D sass-loader@8.0.0
 
-## dev
+## 约定式提交
 
-```shell
-npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/node
-```
-
+1. feat: 新功能
+2. fix: 修补bug
+3. docs: 文档的变更
+4. style: 格式(不影响代码运行的变动)
+5. refactor: 重构(即不是新增功能，也不是修改bug的代码变动)
+6. perf: 用于性能改进的代码提交
+7. test: 用于添加或修改现有测试
+8. build: 修改影响到了系统的构建或外部依赖
+9. ci: 修改CI配置文件或相关的脚本
+10. revert: 用于撤销以前的commit
+11. chore: 其他一些不影响源码或测试文件的代码变动
