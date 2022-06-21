@@ -16,7 +16,10 @@ const mdPaths = [
   ph.resolve(__dirname, 'notes/career/index.md')
 ]
 
-process.chdir('./dist')
+if(!fs.existsSync('pack')){
+  fs.mkdirSync('pack')
+}
+process.chdir('./pack')
 generateMdPack()
 generateQuestions()
 
