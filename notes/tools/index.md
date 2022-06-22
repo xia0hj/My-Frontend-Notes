@@ -1,5 +1,18 @@
 # webpack 笔记
 
+## webpack 常用 loader
+
+1. css-loader：让 webpack 能够识别读取 .css 文件，解析 css 文件得到一个数组存放处理后的样式字符串
+2. style-loader：将解析后的 css 以标签 style 的形式插入到 HTML 中，需要先经过 css-loader 解析
+3. babel-loader：通过 babel 来解析 .js 文件，会转换去除箭头函数等 es6 语法
+4. url-loader：将图片转换成一个 DataURL，然后打包到 JavaScript 代码中
+
+## webpack 常用插件
+
+1. eslint-webpack-webpack：用于解析 eslint 的插件
+2. html-webpack-plugin：将打包得到的 js 等资源，如 entry 指定的输出文件，以 script 标签插入到指定的 html 中
+3. webpack-dev-server：开发服务器，监听代码文件自动在内存中打包，实时更新页面，不会保存到 dist，运行命令 `npx webpack serve` 启动
+
 ## webpack
 
 ```bash
