@@ -142,4 +142,8 @@ index 是有可能会变化的，diff 算法用 key 来断判是否同一节点�
 ## Vue scoped 原理
 
 给组件的 DOM 都加了用于确保唯一性的属性 data-v-加上 8 位随机数，然后给对应的 CSS 的选择器加上属性选择器，这样来实现样式隔离
-  
+
+## vuex 中的 mutation 和 action 的区别
+
+1. mutation：通过 commit() 方法触发，可以直接修改 state，但只能是同步操作
+2. action：通过 dispatch() 方法触发，支持异步操作，可以在 action 中提交 mutation 去修改 state
