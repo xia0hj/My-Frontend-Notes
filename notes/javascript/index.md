@@ -1,3 +1,5 @@
+# JavaScript
+
 ## JS 的数据类型
 
 1. 基本数据类型有 String、Number、Boolean、Undefined、Null，还有 es6 新增的 Symbol，es10 新增了 BigInt；引用类型有对象、数组、函数 3 种。
@@ -5,6 +7,13 @@
    1. 基本数据类型直接存储在栈中的简单数据段，占据空间小，属于频繁使用的数据，所以保存在栈中。
    2. 引用类型因为占据空间大，而且大小不固定，所以是保存在堆中。
    3. 引用类型在栈中存储了指针，指向它在堆中的地址。
+
+## 如何判断 js 变量的类型
+
+1. typeof
+2. instanceof：用来检查右侧构造函数的原型对象是否出现在左侧实例对象的原型链上
+3. constructor：构造函数的原型对象上有 constructor 属性指向该函数，可访问对象的原型上的 constructor，但这种方法不能检查 null 和 undefined，它们没有原型
+4. Object.prototype.toString.call()：Object 的原型上的 toString() 方法，返回内部属性 \[\[class\]\]，一般是 \[object Number\] 这种样式的字符串
 
 ## undefined 和 null 的区别
 
