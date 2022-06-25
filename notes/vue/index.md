@@ -1,5 +1,22 @@
 # Vue笔记
 
+## vue 和 react 的区别
+
+1. 相同点
+   1. 
+
+## MVC 和 MVVM
+
+1. 是常见的软件架构设计模式，主要通过分离关注点的方式来组织代码结构，优化我们的开发效率。
+2. 比如说开发一个单页应用时，往往一个路由页面对应了一个脚本文件，所有的页面逻辑都在一个脚本文件里。页面的渲染、数据的获取，对用户事件的响应所有的应用逻辑都混合在一起，这样在开发简单项目时，可能看不出什么问题，当时一旦项目变得复杂，那么整个文件就会变得冗长，混乱，这样对我们的项目开发和后期的项目维护是非常不利的。
+3. MVC 通过分离 Model、View 和 Controller 的方式来组织代码结构。其中 View 负责页面的显示逻辑，Model 负责存储页面的业务数据，以及对相应数据的操作。并且 View 和 Model 应用了观察者模式，当 Model 层发生改变的时候它会通知有关 View 层更新页面。Controller 层是 View 层和 Model 层的纽带，它主要负责用户与应用的响应操作，当用户与页面产生交互的时候，Controller 中的事件触发器就开始工作了，通过调用 Model 层，来完成对 Model 的修改，然后 Model 层再去通知 View 层更新。
+4. MVP 模式与 MVC 唯一不同的在于 Presenter 和 Controller。在 MVC 模式中我们使用观察者模式，来实现当 Model 层数据发生变化的时候，通知 View 层的更新。这样 View 层和 Model 层耦合在一起，当项目逻辑变得复杂的时候，可能会造成代码的混乱，并且可能会对代码的复用性造成一些问题。MVP 的模式通过使用 Presenter 来实现对 View 层和 Model 层的解耦。MVC 中的 Controller 只知道 Model 的接口，因此它没有办法控制 View 层的更新，MVP 模式中，View 层的接口暴露给了 Presenter 因此我们可以在 Presenter 中将 Model 的变化和 View 的变化绑定在一起，以此来实现 View 和 Model 的同步更新。这样就实现了对 View 和 Model 的解耦，Presenter 还包含了其他的响应逻辑。
+5. MVVM 模式中的 VM，指的是 ViewModel，它和 MVP 的思想其实是相同的，不过它通过双向的数据绑定，将 View 和 Model 的同步更新给自动化了。当 Model 发生变化的时候，ViewModel 就会自动更新；ViewModel 变化了，View 也会更新。这样就将 Presenter 中的工作给自动化了。我了解过一点双向数据绑定的原理，比如 vue 是通过使用数据劫持和发布订阅者模式来实现的这一功能。
+
+## 为什么要用虚拟 DOM
+
+dom 操作的会导致浏览器的重绘重排，性能开销比较大。当我们在一个方法中出现了多次数据变化时，每次都要操作 dom 很浪费性能。有了虚拟 dom 后，把多次的数据变化先映射到虚拟 dom 中，最后进行一次挂载，相当于只操作了一次真实 dom，有效的降低了性能开销。
+
 ## Vue 生命周期
 
 1. 创建一个 vue 的实例对象，然后在这个对象上创建一些生命周期函数和默认的事件
@@ -23,6 +40,10 @@
 2. 实践中也不应该把它们放一起，因为v-for优先的话，哪怕我们只渲染列表中一小部分元素，也得在每次重渲染的时候遍历整个列表。
 3. 如果是为了过滤列表中的某些项目，可以定义计算属性，返回过滤后的列表让 v-for 使用
 4. 如果是为了隐藏整个列表的话，可以把 v-if 放在 v-for 的容器元素上，例如 ul, ol
+
+## vue 属性重名时的优先级
+
+props ==> methods ==> data ==> computed ==> watch
 
 ## 为什么 data 是一个函数
 
@@ -117,6 +138,10 @@ routes: [
 2. \$route 是当前激活的路由信息对象，每个路由都有一个自己的 route 对象，包含了当前路由的路径、参数、名字等信息
 3. \$router 可以看做是管理一组 route 的容器，包含了很多关键的属性，例如跳转方法、history 对象
 
+## $nextTick 的作用
+
+vue 响应式地改变一个值以后，此时的 dom 并不会立即更新，如果需要在数据改变以后立即通过 dom 做一些操作，可以使用 $nextTick 获得更新后的 dom。
+
 ## Vue key 的作用
 
 1. key 的作用主要是 为了实现高效的更新虚拟 DOM，提高性能。
@@ -143,7 +168,39 @@ index 是有可能会变化的，diff 算法用 key 来断判是否同一节点�
 
 给组件的 DOM 都加了用于确保唯一性的属性 data-v-加上 8 位随机数，然后给对应的 CSS 的选择器加上属性选择器，这样来实现样式隔离
 
+## vue 渲染模板时如何保留 HTML 注释
+
+```vue
+<template comments>
+   ...
+</template>
+```
+
+## vue 自定义指令
+
+```js
+// 1. 创建包含钩子函数的指令对象
+loadingDirective {
+  mounted (el, binding) {
+    // 指令绑定值binding.value就是下面传入的v
+    // 指令参数binding.arg就是下面传入的a
+  }
+  updated (el,binding) {...}
+}
+
+// 2. 在main.js中注册指令
+app.directive('loading', loadingDirective)
+
+// 3. 根据注册的指令名字，在其前面加上v-使用
+<img v-loading:[a]="v">
+```
+
 ## vuex 中的 mutation 和 action 的区别
 
 1. mutation：通过 commit() 方法触发，可以直接修改 state，但只能是同步操作
 2. action：通过 dispatch() 方法触发，支持异步操作，可以在 action 中提交 mutation 去修改 state
+
+## vue3 组合式 API 的作用
+
+vue3 新增的一组 api，它是基于函数的 api，可以更灵活的组织组件的逻辑。
+解决options api在大型项目中，options api不好拆分和重用的问题。
