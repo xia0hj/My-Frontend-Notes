@@ -65,3 +65,36 @@ public int lengthOfLongestSubstring(String s) {
     return maxCount;
 }
 ```
+
+## 5. 最长回文子串
+
+```java
+解法
+如果一个子串，左右两端字母相同，且去掉两端的子串是回文串，那么它就是回文串
+
+public String longestPalindrome(String s) {
+    int len = s.length();
+    // dp[start][end] 表示字符串闭区间 [start,end] 是回文串
+    // start==end 和 start+1==end 两种情况直接判断
+    // for(start:len=>0){ for(end:start=>len) }
+    boolean[][] dp = new boolean[len][len];
+    String maxStr = "";
+
+    for (int start = len - 1; start >= 0; start--) {
+        for (int end = start; end < len; end++) {
+            if (start == end) {
+                dp[start][end] = true;
+            } else if (start + 1 == end) {
+                dp[start][end] = s.charAt(start) == s.charAt(end);
+            } else {
+                boolean isSame = s.charAt(start) == s.charAt(end);
+                dp[start][end] = isSame && dp[start + 1][end - 1];
+            }
+            if (dp[start][end] && (end - start + 1) > maxStr.length()) {
+                maxStr = s.substring(start, end + 1);
+            }
+        }
+    }
+    return maxStr;
+}
+```

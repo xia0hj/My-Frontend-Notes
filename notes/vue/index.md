@@ -202,5 +202,4 @@ app.directive('loading', loadingDirective)
 
 ## vue3 组合式 API 的作用
 
-vue3 新增的一组 api，它是基于函数的 api，可以更灵活的组织组件的逻辑。
-解决options api在大型项目中，options api不好拆分和重用的问题。
+1. vue3 新增的一组 api，它是基于函数的 api，可以更灵活的组织组件的逻辑。解决options api在大型项目中，options api不好拆分和重用的问题。

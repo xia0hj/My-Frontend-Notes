@@ -1,0 +1,15 @@
+{
+  "name": "My-Frontend-Notes",
+  "version": "1.0.0",
+  "description": "1. [Vue](./notes/vue/index.md)\r 2. [Javascript](./notes/javascript/index.md)\r 3. [HTML](./notes/html/index.md)\r 4. [CSS](./notes/css/index.md)\r 5. [算法](./notes/algorithm/index.md)\r 6. [工具](./notes/tools/index.md)\r 7. [后端相关](./notes/backend/index.md)",
+  "main": "pack.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "doctoc": "^2.2.0"
+  }
+}
